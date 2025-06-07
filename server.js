@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./database');
 const schedule = require('node-schedule');
-const puppeteer = require('puppeteer');
 const cors = require('cors');
 const puppeteer = require('puppeteer-core');
 
@@ -42,7 +41,7 @@ function scheduleComment(id, time) {
   console.log(`🕒 در حال ارسال کامنت برای: ${row.post_url}`);
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: '/opt/render/.cache/puppeteer/chrome/linux-137.0.7151.55/chrome-linux64/chrome',
+executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
   const page = await browser.newPage();
