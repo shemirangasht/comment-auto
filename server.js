@@ -37,25 +37,30 @@ function scheduleComment(id, time) {
     db.get(`SELECT * FROM comments WHERE id = ?`, [id], async (err, row) => {
       if (err || !row) return;
 
-      try {
-        console.log(`🕒 در حال ارسال کامنت برای: ${row.post_url}`);
-        const browser = await puppeteer.launch({ headless: true });
-        const page = await browser.newPage();
+   try {
+  console.log(`🕒 در حال ارسال کامنت برای: ${row.post_url}`);
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: '/opt/render/.cache/puppeteer/chrome/linux-137.0.7151.55/chrome-linux64/chrome',
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+  const page = await browser.newPage();
 
-        await page.goto(row.post_url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.type('#author', row.name);
-        await page.type('#email', row.email);
-        await page.type('#comment', row.comment);
-        await page.click('#submit');
+  await page.goto(row.post_url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.type('#author', row.name);
+  await page.type('#email', row.email);
+  await page.type('#comment', row.comment);
+  await page.click('#submit');
 
-        console.log('✅ کامنت ارسال شد!');
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        await browser.close();
+  console.log('✅ کامنت ارسال شد!');
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  await browser.close();
 
-        db.run(`UPDATE comments SET status = 'sent' WHERE id = ?`, [id]);
-      } catch (error) {
-        console.error('❌ اشکال در ارسال کامنت:', error.message);
-      }
+  db.run(`UPDATE comments SET status = 'sent' WHERE id = ?`, [id]);
+} catch (error) {
+  console.error('❌ اشکال در ارسال کامنت:', error.message);
+}
+
     });
   });
 }
