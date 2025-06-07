@@ -4,6 +4,7 @@ const db = require('./database');
 const schedule = require('node-schedule');
 const puppeteer = require('puppeteer');
 const cors = require('cors');
+const puppeteer = require('puppeteer-core');
 
 
 const app = express();
