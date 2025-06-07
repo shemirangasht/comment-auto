@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>مدیریت کامنت‌ها</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    .sent { color: green; font-weight: bold; }
+    .pending { color: orange; font-weight: bold; }
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .delete-btn { background-color: #dc3545; color: white; }
+    .delete-btn:hover { background-color: #a71d2a; }
+  </style>
+</head>
+<body>
+  <h2>لیست کامنت‌های زمان‌بندی‌شده</h2>
+  <table id="commentsTable">
+    <thead>
+      <tr>
+        <th>پست</th>
+        <th>نام</th>
+        <th>ایمیل</th>
+        <th>وضعیت</th>
+        <th>زمان</th>
+        <th>عملیات</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadComments() {
+      const res = await fetch('http://shemirangasht.com/comment-auto/comments');
+      const comments = await res.json();
+      const tbody = document.querySelector('#commentsTable tbody');
+      tbody.innerHTML = '';
+
+      comments.forEach(comment => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${comment.post_url}</td>
+          <td>${comment.name}</td>
+          <td>${comment.email}</td>
+          <td class="${comment.status}">${comment.status}</td>
+          <td>${new Date(comment.scheduled_time).toLocaleString()}</td>
+          <td><button class="delete-btn" onclick="deleteComment(${comment.id})">حذف</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function deleteComment(id) {
+      if (!confirm("آیا مطمئنی می‌خوای این کامنت رو حذف کنی؟")) return;
+      await fetch(`http://shemirangasht.com/comment-auto/comments/${id}`, { method: 'DELETE' });
+      loadComments();
+    }
+
+    loadComments();
+  </script>
+</body>
+</html>

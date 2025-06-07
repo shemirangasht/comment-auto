@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ورود به پنل</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      max-width: 400px;
+      margin: 80px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+    }
+    label {
+      font-weight: bold;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2>ورود به پنل مدیریت</h2>
+  <form id="loginForm">
+    <label>نام کاربری:</label>
+    <input type="text" id="username" required>
+
+    <label>رمز عبور:</label>
+    <input type="password" id="password" required>
+
+    <button type="submit">ورود</button>
+  </form>
+
+  <p id="error" class="error"></p>
+
+  <script>
+    const correctUsername = "admin";
+    const correctPassword = "123456";
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+
+      if (user === correctUsername && pass === correctPassword) {
+        // ورود موفق → هدایت به فرم اصلی
+       window.location.href = "menu.html";
+      } else {
+        document.getElementById('error').innerText = "❌ نام کاربری یا رمز عبور اشتباه است.";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>فرم ثبت کامنت زمان‌بندی‌شده</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+    }
+    label {
+      font-weight: bold;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h2>ثبت کامنت با زمان‌بندی</h2>
+  
+  <form id="commentForm">
+    <label>لینک پست:</label>
+    <input type="text" id="post_url" required>
+
+    <label>نام:</label>
+    <input type="text" id="name" required>
+
+    <label>ایمیل:</label>
+    <input type="email" id="email" required>
+
+    <label>متن کامنت:</label>
+    <textarea id="comment" rows="4" required></textarea>
+
+    <label>تاریخ (به وقت تهران):</label>
+    <input type="date" id="date" required>
+
+    <label>ساعت (به وقت تهران):</label>
+    <input type="time" id="time" required>
+
+    <button type="submit">ثبت کامنت</button>
+  </form>
+
+  <p id="result" style="margin-top:20px; color:green;"></p>
+
+  <script>
+    document.getElementById('commentForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+
+      // تبدیل به فرمت UTC
+      const tehranDate = new Date(`${date}T${time}:00+03:30`);
+      const utcString = tehranDate.toISOString();
+
+      const data = {
+        post_url: document.getElementById('post_url').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        comment: document.getElementById('comment').value,
+        scheduled_time: utcString
+      };
+
+      try {
+        const res = await fetch('http://shemirangasht.com/comment-auto/add-comment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const text = await res.text();
+        document.getElementById('result').innerText = text;
+      } catch (err) {
+        document.getElementById('result').innerText = '❌ خطا در ارسال';
+      }
+    });
+  </script>
+</body>
+</html>
