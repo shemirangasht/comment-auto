@@ -1,17 +1,18 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('comments.db');
+// database.js
+const Database = require('better-sqlite3');
+const db = new Database('comments.db');
 
-// ایجاد جدول اگر وجود نداشته باشد
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS comments (
+// ساخت جدول اگر وجود ندارد
+db.exec(`
+  CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    post_url TEXT NOT NULL,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    comment TEXT NOT NULL,
-    scheduled_time TEXT NOT NULL,
+    post_url TEXT,
+    name TEXT,
+    email TEXT,
+    comment TEXT,
+    scheduled_time TEXT,
     status TEXT DEFAULT 'pending'
-  )`);
-});
+  )
+`);
 
 module.exports = db;
