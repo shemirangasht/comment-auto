@@ -1,0 +1,5 @@
+node_modules/
+*.log
+sqlite3/build/
+.env
+.DS_Store
