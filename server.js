@@ -34,9 +34,11 @@ function scheduleComment(id, time) {
 
       console.log(`🕒 در حال ارسال کامنت برای: ${row.post_url}`);
       const browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-      });
+  headless: true,
+  executablePath: '/opt/render/.cache/puppeteer/chrome/linux-137.0.7151.55/chrome-linux64/chrome',
+  args: ['--no-sandbox', '--disable-setuid-sandbox']
+});
+
       const page = await browser.newPage();
 
       await page.goto(row.post_url, { waitUntil: 'domcontentloaded', timeout: 60000 });
