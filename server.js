@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const db = require('./database');
 const schedule = require('node-schedule');
 const cors = require('cors');
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright');
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,10 +33,8 @@ function scheduleComment(id, time) {
       if (!row) return;
 
       console.log(`🕒 در حال ارسال کامنت برای: ${row.post_url}`);
-      const browser = await puppeteer.launch({
+      const browser = await chromium.launch({
   headless: true,
-  executablePath: '/opt/render/.cache/puppeteer/chrome/linux-137.0.7151.55/chrome-linux64/chrome',
-  args: ['--no-sandbox', '--disable-setuid-sandbox']
 });
 
       const page = await browser.newPage();
