@@ -86,7 +86,7 @@ app.get('/comments', (req, res) => {
 app.delete('/comments/:id', (req, res) => {
   const id = req.params.id;
   try {
-    db.prepare('DELETE FROM comments WHERE id = ?').run(id);
+db.prepare('DELETE FROM comments WHERE id = ?').run(id);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'خطا در حذف کامنت' });
