@@ -14,7 +14,7 @@ app.post('/add-comment', (req, res) => {
   const { post_url, name, email, comment, scheduled_time } = req.body;
 
   try {
-    const stmt = db.prepare(`INSERT INTO comments (post_url, name, email, comment, scheduled_time) VALUES (?, ?, ?, ?, ?)`);
+    const stmt = db.prepare(`INSERT INTO comments (post_url, name, email, comment, scheduled_time, status) VALUES (?, ?, ?, ?, ?, 'pending')`);
     const info = stmt.run(post_url, name, email, comment, scheduled_time);
 
     scheduleComment(info.lastInsertRowid, scheduled_time);
@@ -33,10 +33,7 @@ function scheduleComment(id, time) {
       if (!row) return;
 
       console.log(`🕒 در حال ارسال کامنت برای: ${row.post_url}`);
-      const browser = await chromium.launch({
-  headless: true,
-});
-
+      const browser = await chromium.launch({ headless: true });
       const page = await browser.newPage();
 
       await page.goto(row.post_url, { waitUntil: 'domcontentloaded', timeout: 60000 });
