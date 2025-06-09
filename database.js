@@ -1,9 +1,8 @@
-// database.js
 const Database = require('better-sqlite3');
 const db = new Database('comments.db');
 
-// ساخت جدول اگر وجود ندارد
-db.exec(`
+// اطمینان از وجود جدول
+db.prepare(`
   CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     post_url TEXT,
@@ -11,8 +10,8 @@ db.exec(`
     email TEXT,
     comment TEXT,
     scheduled_time TEXT,
-    status TEXT DEFAULT 'pending'
+    status TEXT
   )
-`);
+`).run();
 
 module.exports = db;

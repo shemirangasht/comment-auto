@@ -51,7 +51,7 @@
 
   <script>
     async function loadComments() {
-      const res = await fetch('http://shemirangasht.com/comment-auto/comments');
+      const res = await fetch('http://localhost:3000/comments');
       const comments = await res.json();
       const tbody = document.querySelector('#commentsTable tbody');
       tbody.innerHTML = '';
@@ -72,7 +72,7 @@
 
     async function deleteComment(id) {
       if (!confirm("آیا مطمئنی می‌خوای این کامنت رو حذف کنی؟")) return;
-      await fetch(`http://shemirangasht.com/comment-auto/comments/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:3000/comments/${id}`, { method: 'DELETE' });
       loadComments();
     }
 
